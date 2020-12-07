@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
+import { useDispatch } from "react-redux";
 import colors from "../constants/colors";
+import { deleteOrder } from "../store/action/order";
 import Card from "./Card";
 import CartItem from "./CartItem";
 const OrderItem = (props) => {
   const [showdetails, setshowdetails] = useState(false);
+
+  const dispatch = useDispatch();
 
   return (
     <Card style={styles.orderItem}>
@@ -12,13 +16,22 @@ const OrderItem = (props) => {
         <Text style={styles.totalAmount}>${props.totalAmount.toFixed(2)}</Text>
         <Text style={styles.date}>{props.date}</Text>
       </View>
-      <Button
-        color={colors.primary}
-        title={showdetails ? "Hide Details" : "Show Details"}
-        onPress={() => {
-          setshowdetails((prevState) => !prevState);
-        }}
-      />
+      <View style={styles.buttons}>
+        <Button
+          color={colors.primary}
+          title={showdetails ? "Hide Details" : "Show Details"}
+          onPress={() => {
+            setshowdetails((prevState) => !prevState);
+          }}
+        />
+        <Button
+          color={colors.primary}
+          title={"Cancel Order"}
+          onPress={() => {
+            dispatch(deleteOrder(props.id));
+          }}
+        />
+      </View>
       {showdetails && (
         <View style={styles.detailItems}>
           {props.items.map((cartitem, idx) => (
@@ -54,5 +67,10 @@ const styles = StyleSheet.create({
   },
   detailItems: {
     width: "100%",
+  },
+  buttons: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
 });
