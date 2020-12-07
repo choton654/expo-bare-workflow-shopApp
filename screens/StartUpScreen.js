@@ -3,25 +3,29 @@ import React, { useEffect } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { useDispatch } from "react-redux";
 import colors from "../constants/colors";
-import { authenticate } from "../store/action/auth";
+import { authenticate, setDidTryAL } from "../store/action/auth";
 
 const StartUpScreen = (props) => {
   const dispatch = useDispatch();
-  console.log("props", props);
+
   useEffect(() => {
     const startAuth = async () => {
       const storageData = await Asyncstorage.getItem("userData");
       if (storageData === null) {
-        // props.navigation.navigate("Auth");
+        dispatch(setDidTryAL());
         return;
       }
-      const { token, userId, expeiryDate } = JSON.parse(storageData);
-      if (new Date(expeiryDate) <= new Date() || !token || !userId) {
-        // props.navigation.navigate("Auth");
+      const { token, userId, expiryDate } = JSON.parse(storageData);
+      const expiretionDate = new Date(expiryDate);
+
+      if (expiretionDate <= new Date() || !token || !userId) {
+        dispatch(setDidTryAL());
         return;
       }
-      dispatch(authenticate(token, userId));
-      // props.navigation.navigate("Products");
+
+      const expirationTime = expiretionDate.getTime() - new Date().getTime();
+
+      dispatch(authenticate(token, userId, expirationTime));
     };
     try {
       startAuth();

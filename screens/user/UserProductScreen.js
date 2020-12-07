@@ -97,7 +97,7 @@ export const userProductsScreenOptions = (navData) => {
           title="Add"
           iconName={Platform.OS === "android" ? "md-create" : "ios-create"}
           onPress={() => {
-            navData.navigation.navigate("EditProduct");
+            navData.navigation.navigate("Edit");
           }}
         />
       </HeaderButtons>

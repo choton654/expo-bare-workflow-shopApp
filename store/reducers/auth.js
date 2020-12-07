@@ -1,9 +1,9 @@
-import {AUTHENTICATE, LOGOUT, SIGNUP} from '../action/auth';
+import { AUTHENTICATE, LOGOUT, SET_DID_TRY_AL, SIGNUP } from "../action/auth";
 
 const initState = {
   token: null,
   userId: null,
-  isLoggedIn: false,
+  didTryAutoLogin: false,
 };
 
 export default (state = initState, action) => {
@@ -12,11 +12,20 @@ export default (state = initState, action) => {
       return {
         token: action.payload.token,
         userId: action.payload.userId,
-        isLoggedIn: true,
+        didTryAutoLogin: true,
+      };
+
+    case SET_DID_TRY_AL:
+      return {
+        ...state,
+        didTryAutoLogin: true,
       };
 
     case LOGOUT:
-      return initState;
+      return {
+        ...initState,
+        didTryAutoLogin: true,
+      };
 
     default:
       return state;
