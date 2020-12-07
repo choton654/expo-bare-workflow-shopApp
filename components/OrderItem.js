@@ -1,48 +1,58 @@
-import React, {useState} from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
-import CartItem from './CartItem';
+import React, { useState } from "react";
+import { Button, StyleSheet, Text, View } from "react-native";
+import colors from "../constants/colors";
+import Card from "./Card";
+import CartItem from "./CartItem";
 const OrderItem = (props) => {
   const [showdetails, setshowdetails] = useState(false);
 
   return (
-    <View style={styles.orderitems}>
+    <Card style={styles.orderItem}>
       <View style={styles.summary}>
-        <Text>Total ${props.totalAmount}</Text>
-        <Text>{props.date}</Text>
+        <Text style={styles.totalAmount}>${props.totalAmount.toFixed(2)}</Text>
+        <Text style={styles.date}>{props.date}</Text>
       </View>
       <Button
-        title={showdetails ? 'Hide Details' : 'Show Details'}
-        onPress={() => setshowdetails((prevState) => !prevState)}
+        color={colors.primary}
+        title={showdetails ? "Hide Details" : "Show Details"}
+        onPress={() => {
+          setshowdetails((prevState) => !prevState);
+        }}
       />
       {showdetails && (
-        <View style={{width: '100%'}}>
+        <View style={styles.detailItems}>
           {props.items.map((cartitem, idx) => (
             <CartItem key={idx} {...cartitem} deletable={false} />
           ))}
         </View>
       )}
-    </View>
+    </Card>
   );
 };
 
 export default OrderItem;
 
 const styles = StyleSheet.create({
-  orderitems: {
-    margin: 10,
-    shadowColor: 'black',
-    shadowOpacity: 0.26,
-    shadowOffset: {width: 0, height: 2},
-    shadowRadius: 8,
-    elevation: 5,
-    borderRadius: 10,
-    padding: 20,
+  orderItem: {
+    margin: 20,
+    padding: 10,
+    alignItems: "center",
   },
   summary: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    marginBottom: 15,
+  },
+  totalAmount: {
+    fontSize: 16,
+  },
+  date: {
+    fontSize: 16,
+    color: "#888",
+  },
+  detailItems: {
+    width: "100%",
   },
 });
